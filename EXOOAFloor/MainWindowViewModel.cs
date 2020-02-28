@@ -17,7 +17,7 @@ namespace EXOOAFloor
     class MainWindowViewModel : INotifyPropertyChanged
     {
         //private readonly string connectionString = @"data source=VM-FORREST;initial catalog=EXOOAKeys2020;persist security info=True;user id=BUBBASQL;password=12345678;MultipleActiveResultSets=True";
-        private readonly string connectionString = @"data source=BUBBA;initial catalog=Produccion;persist security info=True;user id=BUBBASQL;password=12345678;MultipleActiveResultSets=True;";
+        private readonly string connectionString = @"data source=BUBBA;initial catalog=EXOOAKeys2020;persist security info=True;user id=BUBBASQL;password=12345678;MultipleActiveResultSets=True;";
         //private readonly string connectionString = @"data source=DESKTOP;initial catalog=EXOOAKeys2020; integrated security=True; MultipleActiveResultSets=True";
         public MainWindowViewModel(ISnackbarMessageQueue snackbarMessageQueue)
         {
