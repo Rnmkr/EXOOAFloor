@@ -14,7 +14,7 @@ namespace EXOOAFloor
         {
             InitializeComponent();
             this.DataContext = new MainWindowViewModel(MainSnackbar.MessageQueue);
-            this.Title = "Consulta Serial ID 2.0 Producción - v." + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.Title = "Consulta Serial ID 2.0 (Producción) - v." + Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         private void Search_OnKeyDown(object sender, KeyEventArgs e)

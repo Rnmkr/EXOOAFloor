@@ -47,7 +47,7 @@
                 <TextBlock
                     Style="{StaticResource MaterialDesignHeadline6TextBlock}"
                     Margin="8"
-                    Text="CONSULTA SERIAL ID 2.0 Producción"
+                    Text="CONSULTA SERIAL ID 2.0 (Producción)"
                     Grid.Row="0"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Center" />
