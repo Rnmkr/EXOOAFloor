@@ -1,0 +1,57 @@
+﻿<UserControl
+    x:Class="EXOOAFloor.ConfirmDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    mc:Ignorable="d">
+    <Grid Margin="16">
+
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock
+            x:Name="Title"
+            Style="{StaticResource MaterialDesignBody2TextBlock}"
+            Grid.Row="0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top" />
+        
+        <TextBlock
+            x:Name="Message"
+            Margin="0,16,0,0"
+            Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+            Grid.Row="1" />
+
+        <StackPanel
+            Orientation="Horizontal"
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom">
+            <Button
+                IsDefault="True"
+                IsCancel="True"
+                Style="{DynamicResource MaterialDesignFlatButton}"
+                Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                <Button.CommandParameter>
+                    <system:Boolean>False</system:Boolean>
+                </Button.CommandParameter>
+                CANCELAR
+            </Button>
+            <Button
+                x:Name="AcceptButton"
+                Style="{DynamicResource MaterialDesignFlatButton}"
+                Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+                <Button.CommandParameter>
+                    <system:Boolean>True</system:Boolean>
+                </Button.CommandParameter>
+                ACEPTAR
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>
