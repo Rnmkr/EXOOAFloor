@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EXOOAFloor
+namespace EXOOAFloor.View.Dialog
 {
     /// <summary>
-    /// Interaction logic for ConfirmDialog.xaml
+    /// Interaction logic for MessageDialog.xaml
     /// </summary>
-    public partial class ConfirmDialog : UserControl
+    public partial class MessageDialog : UserControl
     {
-        public ConfirmDialog()
+        public MessageDialog()
         {
             InitializeComponent();
         }

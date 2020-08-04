@@ -1,0 +1,73 @@
+﻿<UserControl
+    x:Class="EXOOAFloor.View.Dialog.InputDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:helpers="clr-namespace:EXOOAFloor.Helpers"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <Grid
+        Margin="8">
+
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="auto" />
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="48" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Margin="4 4 4 8"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top">Ingrese el total de unidades del pedido</TextBlock>
+
+        <TextBox
+            MaxLength="3"
+            TextChanged="NumberValidationTextBox"
+            PreviewTextInput="InputBox_PreviewTextInput"
+            materialDesign:TransitionAssist.DisableTransitions="True"
+            Margin="8"
+            Grid.Row="1"
+            x:Name="InputBox"
+            VerticalContentAlignment="Center"
+            Height="32"
+            HorizontalContentAlignment="Center"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Width="96" />
+
+
+        <StackPanel
+            Orientation="Horizontal"
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom">
+            <Button
+                Name="btnCancel"
+                IsDefault="True"
+                IsCancel="True"
+                Style="{DynamicResource MaterialDesignFlatButton}"
+                Command="materialDesign:DialogHost.CloseDialogCommand">
+                <Button.CommandParameter>
+                    <system:Boolean>False</system:Boolean>
+                </Button.CommandParameter>
+                CANCELAR
+            </Button>
+            <Button
+                IsEnabled="False"
+                x:Name="btnAccept"
+                Style="{DynamicResource MaterialDesignFlatButton}"
+                CommandParameter="{Binding ElementName=InputBox, Path=Text}"
+                Command="materialDesign:DialogHost.CloseDialogCommand">
+                ACEPTAR
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using EXOOAFloor.ViewModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,8 +14,8 @@ namespace EXOOAFloor
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainWindowViewModel(MainSnackbar.MessageQueue);
             this.Title = "Consulta Serial ID 2.0 (Producción) - v." + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.DataContext = new MainWindowViewModel(MainSnackbar.MessageQueue);
         }
 
         private void Search_OnKeyDown(object sender, KeyEventArgs e)

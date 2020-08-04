@@ -5,7 +5,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:vm="clr-namespace:EXOOAFloor.ViewModel"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    xmlns:local="clr-namespace:EXOOAFloor"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextElement.FontWeight="Regular"
     TextElement.FontSize="13"
@@ -13,12 +17,10 @@
     TextOptions.TextRenderingMode="Auto"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
-    mc:Ignorable="d"
-    Height="450"
-    Width="800"
+    FocusManager.FocusedElement="{Binding ElementName=SearchBox}"
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
-    FocusManager.FocusedElement="{Binding ElementName=SearchBox}">
+    Width="1120">
     <Window.Resources>
         <CollectionViewSource
             x:Key="SortedList"
@@ -30,6 +32,7 @@
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
     </Window.Resources>
+
     <materialDesign:DialogHost
         x:Name="RootDialog"
         CloseOnClickAway="False"
@@ -37,197 +40,358 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition
-                    Height="48" />
+                    Height="auto" />
                 <RowDefinition
                     Height="*" />
             </Grid.RowDefinitions>
+
             <materialDesign:ColorZone
+                Grid.Row="0"
                 Mode="PrimaryMid"
                 materialDesign:ShadowAssist.ShadowDepth="Depth3">
-                <TextBlock
-                    Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                    Margin="8"
-                    Text="CONSULTA SERIAL ID 2.0 (Producción)"
-                    Grid.Row="0"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Center" />
-            </materialDesign:ColorZone>
-            <Grid
-                Grid.Row="1"
-                HorizontalAlignment="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="88" />
-                    <RowDefinition
-                        Height="*" />
-                </Grid.RowDefinitions>
-
-                <DockPanel
-                    Grid.Row="0"
-                    Margin="8"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="*" />
+                        <ColumnDefinition
+                            Width="auto" />
+                    </Grid.ColumnDefinitions>
                     <StackPanel
-                        Margin="4 0 0 0"
-                        Grid.Row="1"
+                        Margin="8"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
                         <materialDesign:ColorZone
-                            Padding="3"
                             CornerRadius="5"
-                            Mode="Dark"
-                            Background="#212121"
-                            VerticalAlignment="Stretch">
+                            Mode="Standard"
+                            VerticalAlignment="Stretch"
+                            Margin="4,0,0,0">
                             <StackPanel
-                                Margin="8"
+                                Visibility="Collapsed"
                                 Orientation="Horizontal"
-                                VerticalAlignment="Center">
-                                <Button
-                                    Command="{Binding DeleteSelectedCommand}"
-                                    Margin="0 0 8 0"
-                                    ToolTip="Eliminar Registros Marcados con Tílde"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
-                                    <materialDesign:PackIcon
-                                        Kind="DeleteForever" />
-                                </Button>
-                                <Border
-                                    Background="White"
-                                    CornerRadius="3">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition
-                                                Width="Auto" />
-                                            <ColumnDefinition
-                                                Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBox
-                                            x:Name="SearchBox"
-                                            KeyDown="Search_OnKeyDown"
-                                            Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
-                                            Foreground="DimGray"
-                                            Margin="5"
-                                            materialDesign:HintAssist.Hint="Key / Serial / Pedido"
-                                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
-                                            materialDesign:TextFieldAssist.HasClearButton="True"
-                                            BorderThickness="0"
-                                            Width="250"
-                                            HorizontalContentAlignment="Stretch"
-                                            VerticalContentAlignment="Center"
-                                            Padding="2,0,0,0" />
-                                        <Button
-                                            x:Name="SearchButton"
-                                            Grid.Column="1"
-                                            Style="{DynamicResource MaterialDesignToolButton}"
-                                            Command="{Binding SearchCommand}"
-                                            CommandParameter="{Binding ElementName=SearchBox, Path=Text}"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
-                                            Height="Auto">
-                                            <materialDesign:PackIcon
-                                                Kind="Magnify"
-                                                Opacity=".56" />
-                                        </Button>
-                                    </Grid>
-                                </Border>
+                                Margin="2">
+                                <RadioButton
+                                    Command="{Binding EnableQueryModeCommand}"
+                                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                                    Margin="4"
+                                    IsChecked="True"
+                                    Content="CONSULTA"
+                                    Height="Auto" />
+                                <RadioButton
+                                    Command="{Binding EnableStoreModeCommand}"
+                                    Style="{StaticResource MaterialDesignTabRadioButton}"
+                                    Margin="4"
+                                    IsChecked="False"
+                                    Content="ALMACEN LOCAL"
+                                    Height="Auto" />
                             </StackPanel>
                         </materialDesign:ColorZone>
 
+                        <DockPanel
+                            Grid.Row="0"
+                            Margin="4 0 0 0"
+                            VerticalAlignment="Center">
+
+                            <StackPanel
+                                Margin="4 0 0 0"
+                                Grid.Row="1"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <materialDesign:ColorZone
+                                    Padding="3"
+                                    CornerRadius="5"
+                                    Mode="Dark"
+                                    Background="#212121"
+                                    VerticalAlignment="Stretch">
+
+                                    <StackPanel
+                                        Margin="8"
+                                        Orientation="Horizontal"
+                                        VerticalAlignment="Center">
+
+                                        <Border
+                                            Background="White"
+                                            CornerRadius="3">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition
+                                                        Width="Auto" />
+                                                    <ColumnDefinition
+                                                        Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBox
+                                                    x:Name="SearchBox"
+                                                    KeyDown="Search_OnKeyDown"
+                                                    Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}"
+                                                    Foreground="DimGray"
+                                                    Margin="5"
+                                                    materialDesign:HintAssist.Hint="Key / Serial / Pedido"
+                                                    materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                                    BorderThickness="0"
+                                                    Width="250"
+                                                    HorizontalContentAlignment="Stretch"
+                                                    VerticalContentAlignment="Center"
+                                                    Padding="2,0,0,0" />
+                                                <Button
+                                                    x:Name="SearchButton"
+                                                    Grid.Column="1"
+                                                    Style="{DynamicResource MaterialDesignToolButton}"
+                                                    Command="{Binding SearchCommand}"
+                                                    CommandParameter="{Binding ElementName=SearchBox, Path=Text}"
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    Height="Auto">
+                                                    <materialDesign:PackIcon
+                                                        Kind="Magnify"
+                                                        Opacity=".56" />
+                                                </Button>
+                                            </Grid>
+                                        </Border>
+                                        <Button
+                                            Command="{Binding ShowMissingCommand}"
+                                            Margin="12 0 0 0"
+                                            ToolTip="Encontrar Números Faltantes en un Pedido"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                            <materialDesign:PackIcon
+                                                Kind="QuestionMark" />
+                                        </Button>
+                                        <Button
+                                            Command="{Binding ExportListCommand}"
+                                            Margin="8 0 0 0"
+                                            ToolTip="Exportar lista en Excel (.XLS)"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                            <materialDesign:PackIcon
+                                                Kind="FileExcel" />
+                                        </Button>
+                                        <Button
+                                            Command="{Binding SetAsConsumedCommand}"
+                                            Margin="8 0 8 0"
+                                            ToolTip="Colocar en estado 'Consumed'"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                            <materialDesign:PackIcon
+                                                Kind="Refresh" />
+                                        </Button>
+                                        <Button
+                                            Visibility="Collapsed"
+                                            Command="{Binding RecycleSelectedCommand}"
+                                            Margin="0 0 8 0"
+                                            ToolTip="Almacenar Licencias Seleccionadas (Solo Bound)"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                            <materialDesign:PackIcon
+                                                Kind="Store" />
+                                        </Button>
+                                        <Button
+                                            Visibility="Collapsed"
+                                            Command="{Binding RecycleSelectedCommand}"
+                                            Margin="0 0 8 0"
+                                            ToolTip="Almacenar Licencias Seleccionadas (Solo Bound)"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                            <materialDesign:PackIcon
+                                                Kind="Recycle" />
+                                        </Button>
+
+                                        <Button
+                                            Visibility="Collapsed"
+                                            Command="{Binding RecycleSelectedCommand}"
+                                            Margin="0 0 8 0"
+                                            ToolTip="Almacenar Licencias Seleccionadas (Solo Bound)"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                            <materialDesign:PackIcon
+                                                Kind="Redo" />
+                                        </Button>
+
+
+                                        <Button
+                                            Visibility="Collapsed"
+                                            Command="{Binding RecycleSelectedCommand}"
+                                            Margin="0 0 8 0"
+                                            ToolTip="Almacenar Licencias Seleccionadas (Solo Bound)"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                            <materialDesign:PackIcon
+                                                Kind="RedoVariant" />
+                                        </Button>
+
+                                        <Button
+                                            Visibility="Collapsed"
+                                            Command="{Binding RecycleSelectedCommand}"
+                                            Margin="0 0 8 0"
+                                            ToolTip="Almacenar Licencias Seleccionadas (Solo Bound)"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                            <materialDesign:PackIcon
+                                                Kind="Resistor" />
+                                        </Button>
+
+                                        <Button
+                                            Visibility="Collapsed"
+                                            Command="{Binding RecycleSelectedCommand}"
+                                            Margin="0 0 8 0"
+                                            ToolTip="Almacenar Licencias Seleccionadas (Solo Bound)"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                            <materialDesign:PackIcon
+                                                Kind="Blur" />
+                                        </Button>
+
+                                        <Button
+                                            Command="{Binding DeleteSelectedCommand}"
+                                            Margin="0"
+                                            ToolTip="Eliminar Registros Marcados con Tílde"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+                                            <materialDesign:PackIcon
+                                                Kind="DeleteForever" />
+                                        </Button>
+
+
+
+
+                                    </StackPanel>
+                                </materialDesign:ColorZone>
+
+                            </StackPanel>
+
+                        </DockPanel>
+                    </StackPanel>
+                    
+                    <StackPanel
+                        Orientation="Vertical"
+                        Margin="0 0 16 0"
+                        MinWidth="100"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right">
+                    <TextBlock
+                        MinWidth="100"
+                        Text="{Binding ResultCount}"
+                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}" />
+                        <TextBlock
+                            MinWidth="100"
+                            Text="{Binding ResultConsumedCount}"
+                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}" />
+                        <TextBlock
+                            MinWidth="100"
+                            Text="{Binding ResultBoundCount}"
+                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}" />
+
                     </StackPanel>
 
-                </DockPanel>
 
+                </Grid>
 
-                <DataGrid
-                    Grid.Row="1"
-                    ItemsSource="{Binding Source={StaticResource SortedList}, UpdateSourceTrigger=PropertyChanged}"
-                    materialDesign:DataGridAssist.CellPadding="13 8 8 8"
-                    materialDesign:DataGridAssist.ColumnHeaderPadding="8">
+            </materialDesign:ColorZone>
 
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.HeaderTemplate>
-                                <DataTemplate>
-                                    <CheckBox
-                                        IsChecked="{Binding DataContext.IsAllChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
-                                        Command="{Binding DataContext.CheckAllReportsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.HeaderTemplate>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox
-                                        IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                        Command="{Binding DataContext.CheckReportCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+            <DataGrid
+                x:Name="dgReports"
+                Grid.Row="1"
+                Margin="0 24 0 0"
+                ItemsSource="{Binding Source={StaticResource SortedList}, UpdateSourceTrigger=PropertyChanged}"
+                materialDesign:DataGridAssist.CellPadding="13 8 8 8"
+                materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+                HorizontalAlignment="Center">
 
-                        <materialDesign:DataGridTextColumn
-                            IsReadOnly="True"
-                            Binding="{Binding OAKey}"
-                            Header="OA Key"
-                            MaxLength="255" />
-                        <materialDesign:DataGridTextColumn
-                            IsReadOnly="True"
-                            Binding="{Binding SerialNumber}"
-                            Header="Numero de Serie" />
-                        <materialDesign:DataGridTextColumn
-                            IsReadOnly="True"
-                            Binding="{Binding State}"
-                            Header="Estado"
-                            MaxLength="255">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style
-                                    TargetType="{x:Type TextBlock}">
-                                    <Style.Triggers>
-                                        <Trigger
-                                            Property="Text"
-                                            Value="Bound">
-                                            <Setter
-                                                Property="Foreground"
-                                                Value="Green" />
-                                        </Trigger>
-                                        <Trigger
-                                            Property="Text"
-                                            Value="Consumed">
-                                            <Setter
-                                                Property="Foreground"
-                                                Value="Yellow" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </materialDesign:DataGridTextColumn>
-                        <materialDesign:DataGridTextColumn
-                            IsReadOnly="True"
-                            Foreground="DarkSlateGray"
-                            Binding="{Binding DateConsumed, StringFormat='MM/dd/yyyy HH:mm'}"
-                            Header="Fecha Consumida"
-                            MaxLength="255" />
-                        <materialDesign:DataGridTextColumn
-                            IsReadOnly="True"
-                            Foreground="DarkSlateGray"
-                            Binding="{Binding DateBound, StringFormat='MM/dd/yyyy HH:mm'}"
-                            Header="Fecha Reportada"
-                            MaxLength="255" />
-                        <materialDesign:DataGridTextColumn
-                            Foreground="DarkSlateGray"
-                            Binding="{Binding ReportID}"
-                            Header="ID"
-                            MaxLength="255" />
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <CheckBox
+                                    DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                                    IsChecked="{Binding DataContext.IsAllChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Command="{Binding DataContext.CheckAllReportsCommand}" />
+                            </DataTemplate>
+                        </DataGridColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox
+                                    IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Command="{Binding Parent.DataContext.CheckReportCommand, ElementName=dgReports}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-                    </DataGrid.Columns>
+                    <materialDesign:DataGridTextColumn
+                        FontFamily="Consolas"
+                        IsReadOnly="True"
+                        Binding="{Binding OAKey}"
+                        Header="OA Key"
+                        MaxLength="255" />
+                    <materialDesign:DataGridTextColumn
+                        FontFamily="Consolas"
+                        IsReadOnly="True"
+                        Binding="{Binding SerialNumber}"
+                        Header="Numero de Serie" />
+                    <materialDesign:DataGridTextColumn
+                        IsReadOnly="True"
+                        Binding="{Binding State}"
+                        Header="Estado"
+                        MaxLength="255">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style
+                                TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <Trigger
+                                        Property="Text"
+                                        Value="Bound">
+                                        <Setter
+                                            Property="Foreground"
+                                            Value="Green" />
+                                    </Trigger>
+                                    <Trigger
+                                        Property="Text"
+                                        Value="Consumed">
+                                        <Setter
+                                            Property="Foreground"
+                                            Value="Yellow" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn
+                        Foreground="DarkSlateGray"
+                        Binding="{Binding Source}"
+                        Header="Origen"
+                        MaxLength="255" />
+                    <materialDesign:DataGridTextColumn
+                        IsReadOnly="True"
+                        Foreground="DarkSlateGray"
+                        Binding="{Binding DateConsumed, StringFormat='MM/dd/yyyy HH:mm'}"
+                        Header="Fecha Consumida"
+                        MaxLength="255" />
+                    <materialDesign:DataGridTextColumn
+                        IsReadOnly="True"
+                        Foreground="DarkSlateGray"
+                        Binding="{Binding DateBound, StringFormat='MM/dd/yyyy HH:mm'}"
+                        Header="Fecha Reportada"
+                        MaxLength="255" />
+                    <materialDesign:DataGridTextColumn
+                        Foreground="DarkSlateGray"
+                        Binding="{Binding ReportID}"
+                        Header="ID"
+                        MaxLength="255" />
 
-                </DataGrid>
+                </DataGrid.Columns>
 
-            </Grid>
+            </DataGrid>
+
             <materialDesign:Snackbar
                 MessageQueue="{materialDesign:MessageQueue}"
                 HorizontalAlignment="Stretch"
                 x:Name="MainSnackbar"
                 Grid.Row="1" />
+
+
         </Grid>
     </materialDesign:DialogHost>
+
+
 </Window>
+
