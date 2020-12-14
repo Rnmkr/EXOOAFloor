@@ -176,70 +176,25 @@
                                             <materialDesign:PackIcon
                                                 Kind="Refresh" />
                                         </Button>
+
                                         <Button
-                                            Visibility="Collapsed"
-                                            Command="{Binding RecycleSelectedCommand}"
+                                            Command="{Binding ShowLogFile}"
                                             Margin="0 0 8 0"
-                                            ToolTip="Almacenar Licencias Seleccionadas (Solo Bound)"
+                                            ToolTip="Ver Log"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
                                             <materialDesign:PackIcon
-                                                Kind="Store" />
-                                        </Button>
-                                        <Button
-                                            Visibility="Collapsed"
-                                            Command="{Binding RecycleSelectedCommand}"
-                                            Margin="0 0 8 0"
-                                            ToolTip="Almacenar Licencias Seleccionadas (Solo Bound)"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center">
-                                            <materialDesign:PackIcon
-                                                Kind="Recycle" />
+                                                Kind="ScriptText" />
                                         </Button>
 
                                         <Button
-                                            Visibility="Collapsed"
-                                            Command="{Binding RecycleSelectedCommand}"
+                                            Command="{Binding SetPackageStatus}"
                                             Margin="0 0 8 0"
-                                            ToolTip="Almacenar Licencias Seleccionadas (Solo Bound)"
+                                            ToolTip="Disponible/Embalada"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
                                             <materialDesign:PackIcon
-                                                Kind="Redo" />
-                                        </Button>
-
-
-                                        <Button
-                                            Visibility="Collapsed"
-                                            Command="{Binding RecycleSelectedCommand}"
-                                            Margin="0 0 8 0"
-                                            ToolTip="Almacenar Licencias Seleccionadas (Solo Bound)"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center">
-                                            <materialDesign:PackIcon
-                                                Kind="RedoVariant" />
-                                        </Button>
-
-                                        <Button
-                                            Visibility="Collapsed"
-                                            Command="{Binding RecycleSelectedCommand}"
-                                            Margin="0 0 8 0"
-                                            ToolTip="Almacenar Licencias Seleccionadas (Solo Bound)"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center">
-                                            <materialDesign:PackIcon
-                                                Kind="Resistor" />
-                                        </Button>
-
-                                        <Button
-                                            Visibility="Collapsed"
-                                            Command="{Binding RecycleSelectedCommand}"
-                                            Margin="0 0 8 0"
-                                            ToolTip="Almacenar Licencias Seleccionadas (Solo Bound)"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center">
-                                            <materialDesign:PackIcon
-                                                Kind="Blur" />
+                                                Kind="Package" />
                                         </Button>
 
                                         <Button
@@ -252,9 +207,6 @@
                                                 Kind="DeleteForever" />
                                         </Button>
 
-
-
-
                                     </StackPanel>
                                 </materialDesign:ColorZone>
 
@@ -262,16 +214,16 @@
 
                         </DockPanel>
                     </StackPanel>
-                    
+
                     <StackPanel
                         Orientation="Vertical"
                         Margin="0 0 16 0"
                         MinWidth="100"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right">
-                    <TextBlock
-                        MinWidth="100"
-                        Text="{Binding ResultCount}"
+                        <TextBlock
+                            MinWidth="100"
+                            Text="{Binding ResultCount}"
                             Style="{StaticResource MaterialDesignSubtitle1TextBlock}" />
                         <TextBlock
                             MinWidth="100"
@@ -316,21 +268,9 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-
-                    <materialDesign:DataGridTextColumn
-                        FontFamily="Consolas"
-                        IsReadOnly="True"
-                        Binding="{Binding OAKey}"
-                        Header="OA Key"
-                        MaxLength="255" />
-                    <materialDesign:DataGridTextColumn
-                        FontFamily="Consolas"
-                        IsReadOnly="True"
-                        Binding="{Binding SerialNumber}"
-                        Header="Numero de Serie" />
                     <materialDesign:DataGridTextColumn
                         IsReadOnly="True"
-                        Binding="{Binding State}"
+                        Binding="{Binding ReportState}"
                         Header="Estado"
                         MaxLength="255">
                         <DataGridTextColumn.ElementStyle>
@@ -355,29 +295,55 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </materialDesign:DataGridTextColumn>
+
+                    <materialDesign:DataGridTextColumn
+                        FontFamily="Consolas"
+                        IsReadOnly="True"
+                        Binding="{Binding ProductKey}"
+                        Header="ProductKey"
+                        MaxLength="255" />
+                    <materialDesign:DataGridTextColumn
+                        FontFamily="Consolas"
+                        IsReadOnly="True"
+                        Binding="{Binding SerialNumber}"
+                        Header="Numero de Serie" />
+                    <materialDesign:DataGridTextColumn
+                        Foreground="DarkSlateGray"
+                        Binding="{Binding ProductKeyVersion, FallbackValue='N/A' }"
+                        Header="Version"
+                        MaxLength="255" />
+                    <materialDesign:DataGridTextColumn
+                        IsReadOnly="True"
+                        Foreground="DarkSlateGray"
+                        Binding="{Binding DateConsumed, StringFormat='MM/dd/yyyy HH:mm', FallbackValue='N/A'}"
+                        Header="Consumed"
+                        MaxLength="255" />
+                    <materialDesign:DataGridTextColumn
+                        IsReadOnly="True"
+                        Foreground="DarkSlateGray"
+                        Binding="{Binding DateBound, StringFormat='MM/dd/yyyy HH:mm', FallbackValue='N/A'}"
+                        Header="Bound"
+                        MaxLength="255" />
                     <materialDesign:DataGridTextColumn
                         Foreground="DarkSlateGray"
                         Binding="{Binding Source}"
                         Header="Origen"
                         MaxLength="255" />
                     <materialDesign:DataGridTextColumn
-                        IsReadOnly="True"
                         Foreground="DarkSlateGray"
-                        Binding="{Binding DateConsumed, StringFormat='MM/dd/yyyy HH:mm'}"
-                        Header="Fecha Consumida"
-                        MaxLength="255" />
-                    <materialDesign:DataGridTextColumn
-                        IsReadOnly="True"
-                        Foreground="DarkSlateGray"
-                        Binding="{Binding DateBound, StringFormat='MM/dd/yyyy HH:mm'}"
-                        Header="Fecha Reportada"
+                        Binding="{Binding ProductKeyID, FallbackValue='N/A'}"
+                        Header="ProductKeyID"
                         MaxLength="255" />
                     <materialDesign:DataGridTextColumn
                         Foreground="DarkSlateGray"
-                        Binding="{Binding ReportID}"
-                        Header="ID"
+                        Binding="{Binding ProductKeyPartNumber, FallbackValue='N/A'}"
+                        Header="ProductKeyPartNumber"
                         MaxLength="255" />
-
+                    <materialDesign:DataGridTextColumn
+                        Foreground="DarkSlateGray"
+                        Binding="{Binding ProductKeyState, FallbackValue='N/A'}"
+                        Header="ProductKeyState"
+                        MaxLength="255" />
                 </DataGrid.Columns>
 
             </DataGrid>

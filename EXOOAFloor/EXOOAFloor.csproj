@@ -87,6 +87,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\OnlyDigitsValidationRule.cs" />
+    <Compile Include="Helpers\ServerFiles.cs" />
     <Compile Include="View\Dialog\ConfirmDialog.xaml.cs">
       <DependentUpon>ConfirmDialog.xaml</DependentUpon>
     </Compile>
@@ -96,7 +97,7 @@
     <Compile Include="View\Dialog\MessageDialog.xaml.cs">
       <DependentUpon>MessageDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\OAKeyReport.cs" />
+    <Compile Include="Model\ProductKeyReport.cs" />
     <Compile Include="View\Dialog\PasswordDialog.xaml.cs">
       <DependentUpon>PasswordDialog.xaml</DependentUpon>
     </Compile>

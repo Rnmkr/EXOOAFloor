@@ -1,5 +1,5 @@
 ﻿using ClosedXML.Excel;
-using EXOOAFloor.View;
+using EXOOAFloor.Helpers;
 using EXOOAFloor.View.Dialog;
 using MaterialDesignThemes.Wpf;
 using System;
@@ -10,14 +10,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
 /// <summary>
 /// Checkbox 'Select All' adapted from
 /// https://stackoverflow.com/a/56278962
@@ -35,7 +32,8 @@ namespace EXOOAFloor.ViewModel
 
         #region icommands
         public ICommand DeleteSelectedCommand { get; set; }
-        public ICommand RecycleSelectedCommand { get; set; }
+        public ICommand ShowLogFileCommand { get; set; }
+        public ICommand SetPackageStatusCommand { get; set; }
         public ICommand CheckReportCommand { get; set; }
         public ICommand CheckAllReportsCommand { get; set; }
         public ICommand ChangeViewCommand { get; set; }
@@ -52,24 +50,47 @@ namespace EXOOAFloor.ViewModel
         public MainWindowViewModel(ISnackbarMessageQueue snackbarMessageQueue)
         {
             _snackbarMessageQueue = snackbarMessageQueue;
-            
+
             SearchCommand = new RelayCommand(SelectSearchQueryAsync, SelectSearchQueryAsync_CanExecute);
-            
+
             ShowMissingCommand = new RelayCommand(FindMissingNumbers, FindMissing_CanExecute);
-            
+
             SetAsConsumedCommand = new RelayCommand(SetAsConsumed, DeleteSelectedQueryAsync_CanExecute);
-            
+
             DeleteSelectedCommand = new RelayCommand(ShowPasswordDialogAsync, DeleteSelectedQueryAsync_CanExecute);
 
             ExportListCommand = new RelayCommand(ExportList, FindMissing_CanExecute);
 
+            ShowLogFileCommand = new RelayCommand(ShowLogFile, ShowLogFile_CanExecute);
+
+            SetPackageStatusCommand = new RelayCommand(SetPackageStatus, SetPackageStatus_CanExecute);
+
             CheckReportCommand = new RelayCommand(OnCheckReportAsync, (o) => true);
+
             CheckAllReportsCommand = new RelayCommand(OnCheckAllReportsAsync, CheckAllBox_CanExecute);
-            //RecycleSelectedCommand = new RelayCommand(RecycleSelectedQueryAsync, (o) => true);
-            //EnableStoreModeCommand = new RelayCommand(EnableStoreMode, (o) => true);
-            //EnableQueryModeCommand = new RelayCommand(EnableQueryMode, (o) => true);
+
             _snackbarMessageQueue = snackbarMessageQueue;
+
             IsAllChecked = false;
+        }
+
+
+        private void SetPackageStatus(object obj)
+        {
+            throw new NotImplementedException();
+        }
+        private bool SetPackageStatus_CanExecute(object arg)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ShowLogFile(object obj)
+        {
+            throw new NotImplementedException();
+        }
+        private bool ShowLogFile_CanExecute(object arg)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
@@ -108,7 +129,7 @@ namespace EXOOAFloor.ViewModel
                     var workbook = new XLWorkbook();
                     DataTable dt = new DataTable();
                     //dt = LINQToDataTable(SearchResults);
-                    
+
                     dt.Columns.Add("Numero de Serie");
                     dt.Columns.Add("OA Key");
                     dt.Columns.Add("Estado");
@@ -118,8 +139,8 @@ namespace EXOOAFloor.ViewModel
                     {
                         DataRow dr = dt.NewRow();
                         dr["Numero de Serie"] = results.SerialNumber;
-                        dr["OA Key"] = results.OAKey;
-                        dr["Estado"] = results.State;
+                        dr["OA Key"] = results.ProductKey;
+                        dr["Estado"] = results.ReportState;
                         dr["Fecha Consumida"] = results.DateConsumed;
                         dt.Rows.Add(dr);
                     }
@@ -209,7 +230,6 @@ namespace EXOOAFloor.ViewModel
             }
         }
 
-
         private bool? _isAllChecked;
         public bool? IsAllChecked
         {
@@ -240,8 +260,8 @@ namespace EXOOAFloor.ViewModel
             }
         }
 
-        private ObservableCollection<OAKeyReport> _searchResults;
-        public ObservableCollection<OAKeyReport> SearchResults
+        private ObservableCollection<ProductKeyReport> _searchResults;
+        public ObservableCollection<ProductKeyReport> SearchResults
         {
             get => _searchResults;
             set
@@ -332,8 +352,8 @@ namespace EXOOAFloor.ViewModel
 
                 Task.Run(() =>
                 {
-                    IEnumerable<OAKeyReport> selectedRecords = SearchResults
-                    .Where(w => w.IsChecked == true && w.State != "Consumed")
+                    IEnumerable<ProductKeyReport> selectedRecords = SearchResults
+                    .Where(w => w.IsChecked == true && w.ReportState != "Consumed")
                     .Select(s => s);
                     ExecuteSetAsConsumedQuery(selectedRecords);
 
@@ -342,7 +362,7 @@ namespace EXOOAFloor.ViewModel
             }));
         }
 
-        private void ExecuteSetAsConsumedQuery(IEnumerable<OAKeyReport> selectedRecords)
+        private void ExecuteSetAsConsumedQuery(IEnumerable<ProductKeyReport> selectedRecords)
         {
             try
             {
@@ -363,14 +383,16 @@ namespace EXOOAFloor.ViewModel
                     sqlCommand.Parameters.AddWithValue("@Source", "Manual");
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.Parameters.Clear();
+                    var serverFiles = new ServerFiles(item.SerialNumber);
+                    WriteChangesToLog(item, "SetAsConsumed", serverFiles);
                 }
 
-                ObservableCollection<OAKeyReport> newSearchResults = new ObservableCollection<OAKeyReport>();
+                ObservableCollection<ProductKeyReport> newSearchResults = new ObservableCollection<ProductKeyReport>();
                 foreach (var item in SearchResults)
                 {
                     if (item.IsChecked)
                     {
-                        item.State = "Consumed";
+                        item.ReportState = "Consumed";
                         item.Source = "Manual";
                         newSearchResults.Add(item);
                     }
@@ -462,7 +484,7 @@ namespace EXOOAFloor.ViewModel
 
             using (sqlConnection)
             {
-                ObservableCollection<OAKeyReport> resultList = new ObservableCollection<OAKeyReport>();
+                ObservableCollection<ProductKeyReport> resultList = new ObservableCollection<ProductKeyReport>();
                 IDataReader reader = null;
 
                 try
@@ -477,12 +499,12 @@ namespace EXOOAFloor.ViewModel
 
                     while (reader.Read())
                     {
-                        var reportEntity = new OAKeyReport()
+                        var reportEntity = new ProductKeyReport()
                         {
                             ReportID = (int)reader["ReportID"],
-                            OAKey = (string)reader["OAKey"],
+                            ProductKey = (string)reader["OAKey"],
                             SerialNumber = (string)reader["SerialNumber"],
-                            State = (string)reader["State"],
+                            ReportState = (string)reader["State"],
                             Source = (string)reader["Source"],
                             DateConsumed = (DateTime)reader["DateConsumed"],
                         };
@@ -506,12 +528,12 @@ namespace EXOOAFloor.ViewModel
                     if (rcount == 1) { rencontrado = " registro en TOTAL encontrado."; }
                     ResultCount = rcount.ToString() + rencontrado;
 
-                    int rccount = SearchResults.Where(w => w.State == "Consumed").Count();
+                    int rccount = SearchResults.Where(w => w.ReportState == "Consumed").Count();
                     var rcencontrado = " registros CONSUMED encontrados.";
                     if (rccount == 1) { rcencontrado = " registro CONSUMED encontrado."; }
                     ResultConsumedCount = rccount.ToString() + rcencontrado;
 
-                    int rbcount = SearchResults.Where(w => w.State == "Bound").Count();
+                    int rbcount = SearchResults.Where(w => w.ReportState == "Bound").Count();
                     var rbencontrado = " registros BOUND encontrados.";
                     if (rbcount == 1) { rbencontrado = " registro BOUND encontrado."; }
                     ResultBoundCount = rbcount.ToString() + rbencontrado;
@@ -593,7 +615,7 @@ namespace EXOOAFloor.ViewModel
                 warningEventArgs.Session.UpdateContent(new ProgressDialog());
                 Task.Run(() =>
                 {
-                    IEnumerable<OAKeyReport> selectedRecords = SearchResults
+                    IEnumerable<ProductKeyReport> selectedRecords = SearchResults
                     .Where(w => w.IsChecked == true)
                     .Select(s => s);
                     ExecuteDeleteQuery(selectedRecords);
@@ -603,7 +625,7 @@ namespace EXOOAFloor.ViewModel
             }));
         }
 
-        private void ExecuteDeleteQuery(IEnumerable<OAKeyReport> selectedRecords)
+        private void ExecuteDeleteQuery(IEnumerable<ProductKeyReport> selectedRecords)
         {
             try
             {
@@ -634,23 +656,49 @@ namespace EXOOAFloor.ViewModel
             }
         }
 
-        private void DeleteLogFiles(OAKeyReport report)
+        private void WriteChangesToLog(ProductKeyReport report, string action, ServerFiles serverFiles)
         {
-            var logBasePath = @"\\bubba\ea2100dc89ae9fe21fa9b08ab1bf18662dca1e53a3eebd7d03afebcaf5d57515$";
-            var formattedSerialNumber = Path.Combine(report.SerialNumber.Substring(0, 1), report.SerialNumber.Substring(1, 3),
-                report.SerialNumber.Substring(4, 4), report.SerialNumber.Substring(8, 5));
-            var fullPath = Path.Combine(logBasePath, formattedSerialNumber);
-            var xmlFilePath = Path.Combine(fullPath, "OA3.XML");
-            var binFilePath = Path.Combine(fullPath, "OA3.BIN");
-            if (File.Exists(xmlFilePath)) { File.Delete(xmlFilePath); }
-            if (File.Exists(binFilePath)) { File.Delete(binFilePath); }
+            var timestamp = DateTime.Now.ToString("dd-MM-yyyy") + " - " + DateTime.Now.ToString("H:mm:ss");
+            List<string> warning;
+            switch (action)
+            {
+                case "DeleteKey":
+                    warning = new List<string>
+                    {
+                        timestamp + "  !      LICENCIA ELIMINADA DEL FLOOR",
+                        "                       ! KEY            : " + report.ProductKey,
+                        "                       ! ESTADO         : " + report.ReportState,
+                        "                       ! ORIGEN         : " + report.Source,
+                        "                       ! CONSUMIDA      : " + report.DateConsumed,
+                        "                       ! REPORTADA      : " + report.DateBound,
+                        "                       ! ID             : " + report.ReportID,
+                        "                       ! ProductKeyID   : " + report.ProductKeyID,
+                        "                       ! PartNumber     : " + report.ProductKeyPartNumber,
+                        "                       ! ProductKeyState: " + report.ProductKeyState
+                    };
+                    break;
+                case "SetAsConsumed":
+                    warning = new List<string> { timestamp + "  -= LICENCIA DEVUELTA A ESTADO 'CONSUMIDA' =-" };
+                    break;
+                default:
+                    throw new Exception("No se especificó una acción para el método WriteChangesToLog");
+            }
+            File.AppendAllLines(serverFiles.TestLogFile, warning);
         }
 
-        private void DeleteFromSearchResult(OAKeyReport report)
+        private void DeleteLogFiles(ProductKeyReport report)
+        {
+            var serverFiles = new ServerFiles(report.SerialNumber);
+            if (File.Exists(serverFiles.XmlFile)) { File.Delete(serverFiles.XmlFile); }
+            if (File.Exists(serverFiles.BinFile)) { File.Delete(serverFiles.BinFile); }
+            WriteChangesToLog(report, "DeleteKey", serverFiles);
+        }
+
+        private void DeleteFromSearchResult(ProductKeyReport report)
         {
             if (report == null) throw new ArgumentNullException();
             //mm updatea en tiempo real...
-            var newList = new ObservableCollection<OAKeyReport>(SearchResults);
+            var newList = new ObservableCollection<ProductKeyReport>(SearchResults);
             newList.Remove(report);
             SearchResults = newList;
         }
@@ -662,7 +710,7 @@ namespace EXOOAFloor.ViewModel
             {
                 Task.Run(() =>
                 {
-                    var newList = new ObservableCollection<OAKeyReport>();
+                    var newList = new ObservableCollection<ProductKeyReport>();
                     if (IsAllChecked == true)
                     {
                         foreach (var item in SearchResults)
