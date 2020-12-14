@@ -2,14 +2,8 @@
     x:Class="EXOOAFloor.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
-    xmlns:vm="clr-namespace:EXOOAFloor.ViewModel"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-    xmlns:local="clr-namespace:EXOOAFloor"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextElement.FontWeight="Regular"
     TextElement.FontSize="13"
@@ -178,23 +172,13 @@
                                         </Button>
 
                                         <Button
-                                            Command="{Binding ShowLogFile}"
+                                            Command="{Binding ShowLogFileCommand}"
                                             Margin="0 0 8 0"
                                             ToolTip="Ver Log"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
                                             <materialDesign:PackIcon
                                                 Kind="ScriptText" />
-                                        </Button>
-
-                                        <Button
-                                            Command="{Binding SetPackageStatus}"
-                                            Margin="0 0 8 0"
-                                            ToolTip="Disponible/Embalada"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center">
-                                            <materialDesign:PackIcon
-                                                Kind="Package" />
                                         </Button>
 
                                         <Button
@@ -308,39 +292,39 @@
                         Binding="{Binding SerialNumber}"
                         Header="Numero de Serie" />
                     <materialDesign:DataGridTextColumn
-                        Foreground="DarkSlateGray"
+                        Foreground="DimGray"
                         Binding="{Binding ProductKeyVersion, FallbackValue='N/A' }"
                         Header="Version"
                         MaxLength="255" />
                     <materialDesign:DataGridTextColumn
                         IsReadOnly="True"
-                        Foreground="DarkSlateGray"
+                        Foreground="DimGray"
                         Binding="{Binding DateConsumed, StringFormat='MM/dd/yyyy HH:mm', FallbackValue='N/A'}"
                         Header="Consumed"
                         MaxLength="255" />
                     <materialDesign:DataGridTextColumn
                         IsReadOnly="True"
-                        Foreground="DarkSlateGray"
+                        Foreground="DimGray"
                         Binding="{Binding DateBound, StringFormat='MM/dd/yyyy HH:mm', FallbackValue='N/A'}"
                         Header="Bound"
                         MaxLength="255" />
                     <materialDesign:DataGridTextColumn
-                        Foreground="DarkSlateGray"
+                        Foreground="DimGray"
                         Binding="{Binding Source}"
                         Header="Origen"
                         MaxLength="255" />
                     <materialDesign:DataGridTextColumn
-                        Foreground="DarkSlateGray"
+                        Foreground="DarkBlue"
                         Binding="{Binding ProductKeyID, FallbackValue='N/A'}"
                         Header="ProductKeyID"
                         MaxLength="255" />
                     <materialDesign:DataGridTextColumn
-                        Foreground="DarkSlateGray"
+                        Foreground="DarkBlue"
                         Binding="{Binding ProductKeyPartNumber, FallbackValue='N/A'}"
                         Header="ProductKeyPartNumber"
                         MaxLength="255" />
                     <materialDesign:DataGridTextColumn
-                        Foreground="DarkSlateGray"
+                        Foreground="DarkBlue"
                         Binding="{Binding ProductKeyState, FallbackValue='N/A'}"
                         Header="ProductKeyState"
                         MaxLength="255" />

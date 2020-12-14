@@ -61,9 +61,9 @@ namespace EXOOAFloor.ViewModel
 
             ExportListCommand = new RelayCommand(ExportList, FindMissing_CanExecute);
 
-            ShowLogFileCommand = new RelayCommand(ShowLogFile, ShowLogFile_CanExecute);
+            ShowLogFileCommand = new RelayCommand(ShowLogFileAsync, DeleteSelectedQueryAsync_CanExecute);
 
-            SetPackageStatusCommand = new RelayCommand(SetPackageStatus, SetPackageStatus_CanExecute);
+            SetPackageStatusCommand = new RelayCommand(SetPackageStatus, DeleteSelectedQueryAsync_CanExecute);
 
             CheckReportCommand = new RelayCommand(OnCheckReportAsync, (o) => true);
 
@@ -79,19 +79,24 @@ namespace EXOOAFloor.ViewModel
         {
             throw new NotImplementedException();
         }
-        private bool SetPackageStatus_CanExecute(object arg)
+        private async void ShowLogFileAsync(object obj)
         {
-            throw new NotImplementedException();
+            var a = new ServerFiles("1234567A00001");
+            var confirmDialog = new LogsDialog();
+
+            //var confirmDialog = new MessageDialog
+            //{
+            //    Message = { Text = a.BinFile + " " +  a.BitLogFile + " " +  a.EmbaladoOkFile + " " +  a.IdealFile + " "
+            //    + a.MasterConfigFilePath + " " + a.OrderLogsBaseFolder + " " + a.PixelTrashFile + " " + a.SerialNumberLogsFolder
+            //    + " " + a.ServerLogsBaseFolder + " " + a.TestLogFile + " " + a.TestOkFile + " " + a.XmlFile }
+            //};
+
+            await DialogHost.Show(confirmDialog, new DialogClosingEventHandler((object warningSenderDialog, DialogClosingEventArgs warningEventArgs) =>
+            {
+
+            }));
         }
 
-        private void ShowLogFile(object obj)
-        {
-            throw new NotImplementedException();
-        }
-        private bool ShowLogFile_CanExecute(object arg)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
 
         #region export test

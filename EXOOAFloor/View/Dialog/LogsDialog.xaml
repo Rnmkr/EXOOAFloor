@@ -1,0 +1,262 @@
+﻿<UserControl
+    x:Class="EXOOAFloor.View.Dialog.LogsDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:local="clr-namespace:EXOOAFloor.View.Dialog"
+    xmlns:vm="clr-namespace:EXOOAFloor.ViewModel"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+    mc:Ignorable="d"
+    Height="480"
+    Width="800">
+    <!--<UserControl.Resources>
+        <vm:LogsDialogViewModel
+            x:Key="LogsDialogViewModel"/>
+    </UserControl.Resources>-->
+    <Grid
+        Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="96" />
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="24" />
+            <RowDefinition
+                Height="auto" />
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="*" />
+            <RowDefinition
+                Height="auto" />
+        </Grid.RowDefinitions>
+
+        <Border
+            Background="#FF673AB7"
+            Grid.ColumnSpan="2" />
+        <TextBlock
+            Foreground="White"
+            Margin="8,0,0,0"
+            Grid.ColumnSpan="2"
+            Text="REGISTROS"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center" />
+        <Button
+            Foreground="White"
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="2"
+            Width="22"
+            Height="22"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Padding="0"
+            IsDefault="True"
+            Style="{DynamicResource MaterialDesignFlatButton}"
+            Command="{x:Static wpf:DialogHost.CloseDialogCommand}">
+            <Button.CommandParameter>
+                <system:Boolean>False</system:Boolean>
+            </Button.CommandParameter>
+            <materialDesign:PackIcon
+                Kind="Close"
+                Opacity="1"
+                Width="20"
+                Height="20" />
+        </Button>
+        <TextBlock
+            Text="{Binding OrderNumber}"
+            Grid.Column="0"
+            Grid.Row="1"
+            Margin="4"
+            VerticalAlignment="Top"
+            FontWeight="Bold" />
+
+        <!--<ListBox
+            ItemsSource="{Binding SelectedNumbersList}"
+            BorderThickness="1"
+            BorderBrush="#FFACACAC"
+            SelectionMode="Single"
+            SelectionChanged="{Binding ListBoxSelectionChangedCommand}"
+            Margin="2"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Grid.Row="2"
+            FontWeight="Bold"
+            FontSize="10" />-->
+        <ListBox
+            ItemsSource="{Binding SelectedNumbersList}"
+            BorderThickness="1"
+            BorderBrush="#FFACACAC"
+            SelectionMode="Single"
+            Margin="2"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Grid.Row="2"
+            FontWeight="Bold"
+            FontSize="11" />
+        <TabControl
+            Margin="2"
+            Grid.Column="1"
+            Grid.Row="1"
+            Grid.RowSpan="3">
+            <TabItem
+                Header="TEST MANUAL"
+                FontWeight="Bold">
+                <Grid>
+                    <TextBox
+                        BorderThickness="0"
+                        TextWrapping="Wrap"
+                        Style="{x:Null}"
+                        IsReadOnly="True"
+                        IsReadOnlyCaretVisible="False"
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Auto"
+                        ScrollViewer.CanContentScroll="True"
+                        Text="{Binding TestLog}"
+                        FontWeight="Normal"
+                        FontFamily="Consolas" />
+                </Grid>
+            </TabItem>
+
+            <TabItem
+                Header="BURNINTEST"
+                FontWeight="Bold">
+                <Grid>
+                    <TextBox
+                        BorderThickness="0"
+                        TextWrapping="Wrap"
+                        Style="{x:Null}"
+                        IsReadOnly="True"
+                        IsReadOnlyCaretVisible="False"
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Auto"
+                        ScrollViewer.CanContentScroll="True"
+                        Text="{Binding BitLog}"
+                        FontFamily="Consolas"
+                        FontWeight="Normal" />
+                </Grid>
+            </TabItem>
+            <TabItem
+                Header="OBSERVACIONES"
+                FontWeight="Bold">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition
+                            Height="*" />
+                        <RowDefinition
+                            Height="120" />
+                    </Grid.RowDefinitions>
+                    <TextBox
+                        BorderThickness="0"
+                        Grid.Row="0"
+                        TextWrapping="Wrap"
+                        Style="{x:Null}"
+                        IsReadOnly="True"
+                        IsReadOnlyCaretVisible="False"
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Auto"
+                        ScrollViewer.CanContentScroll="True"
+                        Text="{Binding TestObs}"
+                        FontFamily="Consolas"
+                        FontWeight="Normal" />
+                    <Separator
+                        Grid.Row="1"
+                        VerticalAlignment="Top" />
+                    <TextBox
+                        Background="LightYellow"
+                        Margin="0,5,0,0"
+                        BorderThickness="0"
+                        Grid.Row="1"
+                        TextWrapping="Wrap"
+                        Style="{x:Null}"
+                        IsReadOnly="True"
+                        IsReadOnlyCaretVisible="False"
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Auto"
+                        ScrollViewer.CanContentScroll="True"
+                        Text="{Binding SupervisorObs}"
+                        FontFamily="Consolas"
+                        FontWeight="Normal" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <StackPanel
+            Grid.Row="5"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Orientation="Horizontal"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center">
+            <TextBlock
+                Text="REPARADAS:  "
+                Name="tbRepa"
+                Margin="4,0,8,0"
+                Grid.Column="1"
+                Grid.Row="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontWeight="Bold" />
+            <TextBlock
+                Text="CON PIXEL:  "
+                Name="tbPx"
+                Margin="8,0,0,0"
+                Grid.Column="1"
+                Grid.Row="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontWeight="Bold" />
+        </StackPanel>
+        <StackPanel
+            Margin="2"
+            Orientation="Horizontal"
+            Grid.Row="5"
+            Grid.Column="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center">
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+                <RadioButton
+                    Name="rbSaveAll"
+                    Margin="2"
+                    Content="Todos"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center" />
+                <RadioButton
+                    Name="rbSaveSelected"
+                    IsChecked="True"
+                    Margin="2"
+                    Content="Seleccionado"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center" />
+            </StackPanel>
+            <Button
+                ToolTip="Guardar Logs"
+                Grid.Row="5"
+                Grid.Column="1"
+                Margin="8,0,2,0"
+                Name="btnSaveBit"
+                Width="24"
+                Height="24"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Command="{Binding SaveLogsCommand}"
+                Padding="0">
+                <materialDesign:PackIcon
+                    Kind="ContentSave"
+                    Opacity="1"
+                    Width="16"
+                    Height="16" />
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

@@ -88,11 +88,15 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\OnlyDigitsValidationRule.cs" />
     <Compile Include="Helpers\ServerFiles.cs" />
+    <Compile Include="ViewModel\LogsDialogViewModel.cs" />
     <Compile Include="View\Dialog\ConfirmDialog.xaml.cs">
       <DependentUpon>ConfirmDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Dialog\InputDialog.xaml.cs">
       <DependentUpon>InputDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\LogsDialog.xaml.cs">
+      <DependentUpon>LogsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Dialog\MessageDialog.xaml.cs">
       <DependentUpon>MessageDialog.xaml</DependentUpon>
@@ -122,6 +126,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\Dialog\InputDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialog\LogsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
