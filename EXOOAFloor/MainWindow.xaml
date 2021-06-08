@@ -168,6 +168,7 @@
                                                 Kind="FileExcel" />
                                         </Button>
                                         <Button
+                                            Visibility="Collapsed"
                                             Command="{Binding SetAsConsumedCommand}"
                                             Margin="8 0 8 0"
                                             ToolTip="Colocar en estado 'Consumed'"
@@ -243,6 +244,7 @@
                                         </Button>
 
                                         <Button
+                                           Visibility="Collapsed"
                                             Command="{Binding DeleteSelectedCommand}"
                                             Margin="0"
                                             ToolTip="Eliminar Registros Marcados con Tílde"
